@@ -1,7 +1,9 @@
 cpm-bson
 ========
 
-CPM libbson external
+[![Build Status](https://travis-ci.org/iauns/cpm-bson.png)](https://travis-ci.org/iauns/cpm-bson)
+
+CPM libbson external.
 
 Usage
 -----
