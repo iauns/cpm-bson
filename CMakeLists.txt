@@ -39,16 +39,30 @@ CPM_InitModule(${CPM_MODULE_NAME})
 
 include(ExternalProject)
 set(EP_TARGET_NAME BSON_LIB_EP)
-ExternalProject_Add(${EP_TARGET_NAME}
-  GIT_REPOSITORY "https://github.com/mongodb/libbson.git"
-  GIT_TAG "0.4.0"
-  CONFIGURE_COMMAND <SOURCE_DIR>/autogen.sh "--prefix=${CMAKE_CURRENT_SOURCE_DIR}"
-  PATCH_COMMAND ""
-  INSTALL_DIR ""
-  BUILD_COMMAND "make"
-  BUILD_IN_SOURCE 1
-  INSTALL_COMMAND "make" "install"
-)
+
+if (NOT EMSCRIPTEN)
+  ExternalProject_Add(${EP_TARGET_NAME}
+    GIT_REPOSITORY "https://github.com/mongodb/libbson.git"
+    GIT_TAG "0.4.0"
+    CONFIGURE_COMMAND <SOURCE_DIR>/autogen.sh "--prefix=${CMAKE_CURRENT_SOURCE_DIR}"
+    PATCH_COMMAND ""
+    INSTALL_DIR ""
+    BUILD_COMMAND "make"
+    BUILD_IN_SOURCE 1
+    INSTALL_COMMAND "make" "install"
+    )
+else()
+  ExternalProject_Add(${EP_TARGET_NAME}
+    GIT_REPOSITORY "https://github.com/mongodb/libbson.git"
+    GIT_TAG "0.4.0"
+    CONFIGURE_COMMAND autoreconf -fiv && emconfigure ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR}
+    PATCH_COMMAND ""
+    INSTALL_DIR ""
+    BUILD_COMMAND "emmake make"
+    BUILD_IN_SOURCE 1
+    INSTALL_COMMAND "make" "install"
+    )
+endif()
 
 set(EP_LIBRARY ${CPM_LIB_TARGET_NAME})
 add_library(${EP_LIBRARY} SHARED IMPORTED GLOBAL)
