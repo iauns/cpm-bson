@@ -58,7 +58,7 @@ else()
     CONFIGURE_COMMAND autoreconf -fiv && emconfigure ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR}
     PATCH_COMMAND ""
     INSTALL_DIR ""
-    BUILD_COMMAND "emmake make"
+    BUILD_COMMAND "emmake" "make"
     BUILD_IN_SOURCE 1
     INSTALL_COMMAND "make" "install"
     )
